@@ -1,0 +1,388 @@
+/*Page Layout*/
+
+html{
+    background: #211;
+    background-size: cover;
+    background-image: url('/img/bg.jpg');
+    background-attachment: fixed;
+    font-family: 'open sans', sans-serif;
+    height: 100%;
+}
+
+body{
+    color: #eef;
+    background: #2e2e2e;
+    border: 2px solid #511;
+    box-shadow: 0 0 3px 3px black;
+    margin: 0 auto;
+    min-height: 100%;
+    padding: 0;
+    max-width: 1024px;
+}
+
+p{
+    padding-right: 1em;
+    text-align: justify;
+}
+
+span.edit a{
+    color: #000;
+    font-family: oswald, serif;
+    text-decoration: none;
+}
+
+input, select, textarea {
+    color: #000;
+}
+
+
+
+/*header*/
+
+header{
+    background: #222;
+    border-bottom: 2px solid #511;
+    border-right: 2px solid #511;
+    box-shadow: 1px 0 1px 1px black;
+    min-height: 54px;
+    position: fixed;
+    top: 0;
+    width: 120px;
+}
+
+header h1{
+    background: #211;
+    border: 2px solid #511;
+    box-shadow: 1px 1px 1px 1px black;
+    float: left;
+    font-family: oswald, serif;
+    margin: 12px 12px 12px -30px;
+    padding: 0 6px;
+}
+
+header h2{
+    float: left;
+    font-size: 1em;
+    margin: 40px 0 0 10px;
+}
+
+/*Menu*/
+nav{
+    float: right;
+}
+
+nav a{
+    border-bottom: 2px solid #eef;
+    color: #eef;
+    font-family: oswald, serif;
+    text-decoration: none;
+}
+
+
+nav a:hover{
+    border-bottom: 2px solid #511;
+}
+
+nav p{
+    margin:0;
+}
+
+
+/*asides - used for sub menu selections */
+
+aside{
+
+    float: left;
+    margin: 80px 0 0 0;
+    max-height: calc(100% - 80px);
+    min-height: calc(100% - 68px);
+    padding: 0 0 0 1em;
+    position: fixed;
+    overflow-y: auto;
+    top: 0px;
+    width: 11em;
+}
+
+aside a{
+    color: #eef;
+    font-family: oswald, serif;
+    text-decoration: none;
+}
+
+aside ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+aside li{
+    cursor: pointer;
+}
+
+
+aside div{
+    //box-shadow: 0 1px 0 1px black;
+    //  border-bottom: 2px solid #511;
+}
+
+aside h3{
+    clear: both;
+}
+
+aside .section{
+    text-decoration: underline;
+}
+
+aside .subsection{
+    padding-left: 1em;
+}
+
+aside div p input{
+    width: 100%;
+}
+
+/*content*/
+main{
+    clear: both;
+    margin-top: 40px;
+}
+
+main h2 a, main h3, a{
+    color: #eef;
+}
+
+/*Dice*/
+
+#dice div{
+    background: white;
+    border: 2px solid black;
+    border-radius: 4px;
+    color: black;
+    float: left;
+    height: 2.4em;
+    margin: 0.1em;
+    padding: 0.2em;
+    text-align: center;
+    width: 2.4em;
+}
+
+#d1, #d2, #d3{
+    background: white;
+}
+
+#dice #mod, #dice #dice_total{
+    background: #eef;
+
+}
+
+
+#dice .operator{
+    background: none;
+    border: 2px none;
+    clear: left;
+    color: #eef;
+}
+
+.dice_box{
+    clear: both;
+}
+
+.roll_dice, .reroll{
+    cursor: pointer;
+    -webkit-user-select: none;
+}
+
+/*Forms*/
+
+
+.checkable{
+    border: 2px solid white;
+    border-radius: 4px;
+    box-shadow: 0 0 3px 3px black;
+    cursor: pointer;
+    margin: 5px 0;
+    padding: 3px 5px;
+}
+
+.checkable label{
+    cursor: pointer;
+}
+
+.radio_box_descriptor{
+
+    float:left;
+}
+
+.radio_box_set{
+    display:block;
+    min-width: 15em;
+}
+
+.selected{
+    border: 2px solid orange;
+    box-shadow: none;
+    pading: 3px 8px;
+}
+
+.skill_category{
+    clear: both;
+}
+
+.skill_category div div{
+
+}
+
+.skill_title{
+    float: left;
+
+    min-width: 12em;
+}
+
+
+form label{
+    display: block;
+    margin: 10px 2px 2px 2px;
+}
+
+form input{
+    font-size: 1.6em;
+    margin: 2px;
+    padding: 2px;
+    width: 90%;
+}
+
+form input[type=submit] {
+    width: 20%;
+    margin: 2px;
+}
+
+form input[type=radio] {
+    display: none;
+    float: left;
+    magin: 1em;
+    width: 2em;
+}
+
+form .radio_label {
+    border: 1px solid orange;
+    border-radius: 2px;
+    float: left;
+    margin: 2px 1px 0 1px;
+    padding: 0.6em 1em;
+}
+
+form input[type=radio]:checked ~ .radio_label {
+    border: 1px solid #eef;
+    box-shadow: 1px 1px 1px 1px black;
+    margin: 1px;
+}
+
+form input[type=radio]:checked {
+    border: 1px solid orange;
+    box-shadow: none;
+    margin: 2px 1px 0 1px;
+}
+
+
+
+
+
+form select {
+
+    font-size: 1.6em;
+    margin: 2px;
+    min-width: 30%;
+    padding: 2px;
+}
+
+form textarea{
+    font-size: 1.2em;
+    margin: 2px;
+    padding: 3px;
+    width: 90%;
+}
+
+/*page specifics*/
+#rules, #settingInformation, #dash, #character_sheet{
+ margin-left: 210px;
+}
+
+#chat_messages{
+  height: 300px;
+  overflow-y: scroll;
+}
+
+table.skill_table{
+    clear: both;
+}
+
+td.skill_points, td.skill_bonus, td.skill_total{
+  text-align: center;
+}
+
+td.edit{
+  width: 1.2em;
+}
+
+td.edit a{
+
+  font-size: 125%;
+  font-family: monospace;
+  text-decoration: none;
+}
+
+td.edit.minus{
+  text-align: right;
+}
+
+td.edit.plus{
+  border-right: 1px solid #eef;
+}
+
+/*Media adjustments*/
+@media screen and (max-width: 500px){
+    #rules{
+        margin:5em 0 0 1em;
+
+    }
+
+    aside{
+        background: #222;
+        border-bottom: 2px solid #511;
+        border-right: 2px solid #511;
+        box-shadow: 1px 0 1px 1px black;
+        float: none;
+	margin: 0 0 0 0;
+    max-height: 100%;
+	min-height: 5em;
+        padding: 0 0 0 1em;
+        position: fixed;
+        left: 0;
+        top: 0px;
+        width: calc(100% - 6.5em);
+    }
+
+    header{
+        background: #222;
+        border-bottom: 2px solid #511;
+        border-left: 2px solid #511;
+        box-shadow: 1px 0 1px 1px black;
+        min-height: 5em;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 5em;
+    }
+
+    header h1{
+        display: none;
+    }
+
+    header h2{
+        float: left;
+        font-size: 1em;
+        margin: 0 1em;
+    }
+
+
+}
