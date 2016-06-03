@@ -32,21 +32,25 @@ Route::post('/setting/edit/{id}', ['as' => 'settingInformation.update', 'uses' =
 
 Route::get('/background/add', 'BackgroundController@create');
 Route::post('/background/add', 'BackgroundController@store');
+Route::get('/background/edit/{id}', 'BackgroundController@edit');
+Route::post('/background/edit/{id}', ['as' => 'background.update', 'uses' => 'BackgroundController@update']);
 
 Route::get('/character/view/{id}', ['as' => 'character.view', 'uses' => 'CharacterController@show']);
 Route::get('/character/add', 'CharacterController@create');
 Route::post('/character/add', 'CharacterController@store');
 Route::get('/character/edit/{id}', 'CharacterController@edit');
-Route::post('/character/edit/{id}', ['as' => 'character.update', 'uses' => 'CharacterController@store']);
+Route::post('/character/edit/{id}', ['as' => 'character.update', 'uses' => 'CharacterController@update']);
 Route::get('/character/set_backgrounds/{id}', 'CharacterController@edit_backgrounds');
 Route::post('/character/set_backgrounds/{id}', ['as' => 'character.store_backgrounds','uses' =>'CharacterController@store_backgrounds']);
 Route::get('/character/set_edges/{id}', 'CharacterController@edit_edges');
 Route::post('/character/set_edges/{id}', ['as' => 'character.store_edges','uses' =>'CharacterController@store_edges']);
+Route::post('/character/ajax_remove_edge', ['as' => 'character.ajax_remove_edge','uses' =>'CharacterController@ajax_remove_edge']);
 Route::get('/character/set_skills/{id}', 'CharacterController@edit_skills');
 Route::post('/character/set_skills/{id}', ['as' => 'character.store_skills','uses' =>'CharacterController@store_skills']);
 Route::post('/character/update_inventory', ['as' => 'character.update_inventory','uses' =>'CharacterController@update_inventory']);
 Route::post('/character/ajax_add_skill', ['as' => 'character.ajax_add_skill','uses' =>'CharacterController@ajax_add_skill']);
 Route::post('/character/ajax_update_skill', ['as' => 'character.ajax_update_skill','uses' =>'CharacterController@ajax_update_skill']);
+Route::post('/character/ajax_remove_skill', ['as' => 'character.ajax_remove_skill','uses' =>'CharacterController@ajax_remove_skill']);
 
 Route::get('/skill/add', 'SkillController@create');
 Route::post('/skill/add', 'SkillController@store');

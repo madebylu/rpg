@@ -121,9 +121,20 @@ class CharacterController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($id, CharacterFormRequest $request)
 	{
 		//
+		$character = Character::find($id);
+
+        $character->name = $request->name;
+        $character->heritage_id = $request->heritage_id;
+        $character->description = $request->description;
+        $character->level = $request->level;
+        $character->user_id = Auth::User()->id;
+
+        $character->save();
+
+        return redirect()->route('character.view', [$character->id]);
 	}
 
     /**
@@ -164,9 +175,9 @@ class CharacterController extends Controller {
 	 */
 	public function edit_edges($id)
 	{
-		$edges = Edge::all();
+		$edges = Edge::orderBy('category_id')->orderBy('title')->get();
         $character = Character::find($id);
-				$character_edges = $edges->diff($character->edge);
+        $character_edges = $edges->diff($character->edge);
 
         return view('character.set_edges')
             ->with('edges', $character_edges)
@@ -202,6 +213,17 @@ class CharacterController extends Controller {
 		return redirect()->route('character.view', [$id]);
 	}	
 
+	public function ajax_remove_edge(Request $request){
+		try{
+            $character = Character::find($request->character_id);
+            $character->edge()->detach($request->edge_id);
+        }
+        catch(\Exception $ex) {
+            return $ex;
+        }
+		return 1;
+	
+	}
 	public function ajax_add_skill(Request $request){
 		$character = Character::find($request->character_id);
 
@@ -216,7 +238,18 @@ class CharacterController extends Controller {
 		return 1;
 	
 	}
-
+    
+	public function ajax_remove_skill(Request $request){
+		try{
+            $character = Character::find($request->character_id);
+            $character->skill()->detach($request->skill_id);
+        }
+        catch(\Exception $ex) {
+            return $ex;
+        }
+		return 1;
+	
+	}
 		 /**
 	 * Show the form for assigning skills to a character. No separate method for adding.
 	 *

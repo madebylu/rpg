@@ -16,8 +16,7 @@ body{
     box-shadow: 0 0 3px 3px black;
     margin: 0 auto;
     min-height: 100%;
-    padding: 0;
-    max-width: 1024px;
+    padding-top: 50px;
 }
 
 p{
@@ -42,12 +41,7 @@ input, select, textarea {
 header{
     background: #222;
     border-bottom: 2px solid #511;
-    border-right: 2px solid #511;
     box-shadow: 1px 0 1px 1px black;
-    min-height: 54px;
-    position: fixed;
-    top: 0;
-    width: 120px;
 }
 
 header h1{
@@ -61,14 +55,14 @@ header h1{
 }
 
 header h2{
-    float: left;
-    font-size: 1em;
-    margin: 40px 0 0 10px;
+    float: right;
+    font-size: 1.8em;
+    margin: 8px 0;
 }
 
 /*Menu*/
 nav{
-    float: right;
+    margin: 0 auto;
 }
 
 nav a{

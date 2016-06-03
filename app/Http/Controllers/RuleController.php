@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use App\Background;
 use App\Category;
 use App\Edge;
 use App\Skill;
@@ -25,6 +26,7 @@ class RuleController extends Controller {
         $skills = Skill::orderBy('category_id')->orderBy('title')->get();
         $edges = Edge::orderBy('category_id')->orderBy('title')->get();
         $items = Item::orderBy('category_id')->orderBy('title')->get();
+        $backgrounds = Background::orderBy('title')->get();
         $item_categories = Category::has('item')->with('item')->get();
         $skill_categories = Category::has('skill')->with('skill')->get();
         $edge_categories = Category::has('edge')->with('edge')->get()->sortBy('Edge.category_id')->sortBy('Edge.title');
@@ -33,6 +35,7 @@ class RuleController extends Controller {
             ->with('rules', $rules)
             ->with('skills', $skills)
             ->with('items', $items)
+            ->with('backgrounds', $backgrounds)
             ->with('skill_categories', $skill_categories)
             ->with('edge_categories', $edge_categories)
             ->with('item_categories', $item_categories);

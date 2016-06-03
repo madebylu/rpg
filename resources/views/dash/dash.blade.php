@@ -6,21 +6,22 @@
 <p><a href="/character/add">New Character</a></p>
 <h3>Active Characters</h3>
 
-<ul>
 @foreach($characters as $character)
-    <a href="/character/view/{{$character->id}}"<li>{{$character->name}}</li></a>
+    <p><a href="/character/view/{{$character->id}}">{{$character->name}}</p></a>
 @endforeach
-</ul>
 </aside>
 
 
 
 <div id="dash">
     <h2>Dash - Hi {{$user_name}}.</h2>
+    
+    <h3>All Characters</h3>
+    @foreach($all_characters as $character)
+        <p><a href="/character/view/{{$character->id}}">{{$character->name}}</p></a>
+    @endforeach
 
-
-
-<p>Admin stuff: <a href="/background/add">New Background</a></p>
+    <p>Admin stuff: <a href="/background/add">New Background</a></p>
 
 </div>
 

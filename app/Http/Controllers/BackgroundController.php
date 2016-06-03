@@ -70,7 +70,10 @@ class BackgroundController extends Controller {
 	 */
 	public function edit($id)
 	{
-		//
+	    $background = Background::Find($id);
+        
+        return view('background.form')
+            ->with('background', $background);	
 	}
 
 	/**
@@ -79,9 +82,16 @@ class BackgroundController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(BackgroundFormRequest $request, $id)
 	{
-		//
+		$background = Background::Find($id);
+        
+        $background->title = $request->title;
+        $background->content = $request->content;
+        
+        $background->save();
+        
+        return redirect('/rules#Background' . $id);
 	}
 
 	/**

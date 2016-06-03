@@ -48,13 +48,20 @@
                 </div>
               @endforeach
             </div>
-	    <div><li class="collapsable startCollapsed"><strong>Items</strong> <a href="/item/add">+</a></li>
+            <div><li class="collapsable startCollapsed"><strong>Items</strong> <a href="/item/add">+</a></li>
               @foreach( $item_categories as $item_category)
                 <div>
                 <li class="section"><a href="#{{$item_category->title}}Items">{{ $item_category->title }} Items</a></li>
                   @foreach($item_category->item as $item)
                     <li class="subsection"><a href="#item{{$item->id}}">{{$item->title}}</a></li>
                   @endforeach
+                </div>
+              @endforeach
+            </div>
+            <div><li class="collapsable startCollapsed"><strong>Backgrounds</strong> <a href="/background/add">+</a></li>
+              @foreach( $backgrounds as $background)
+                <div>
+                <li class="section"><a href="#Background{{$background->id}}">{{ $background->title }}</a></li>
                 </div>
               @endforeach
             </div>
@@ -111,7 +118,12 @@
                 <p>{!! nl2br($item->content) !!}</p>
             @endforeach
         @endforeach
-
+        
+        <h2>Backgrounds</h2>
+        @foreach($backgrounds as $background)
+            <h3 id="Background{{$background->id}}">{{$background->title}}<span class="edit"><a href="/background/edit/{{$background->id}}">~</a></span></h3>
+            <p>{!! nl2br($background->content) !!}</p>
+        @endforeach
 
     </div>
 <script>
