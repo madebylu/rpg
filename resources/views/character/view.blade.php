@@ -2,9 +2,7 @@
 
 @section('content')
 <aside>
-
     <div class="dice_box">
-
         <div id="dice">
             <div id="d1" class="reroll">1</div>
             <div id="d2" class="reroll">1</div>
@@ -14,122 +12,22 @@
             <div class="operator"> = </div>
             <div id="dice_total">1</div>
         </div>
-    </div>
 
-    <h3>Update</h3>
-    <p><a href="/character/set_backgrounds/{{$character->id}}">Backgrounds</a></p>
-    <p><a href="/character/set_edges/{{$character->id}}">Edges</a></p>
-    <div>
-        <h3>Table</h3>
-        <p>Colour: <input type="color" id="drawing-colour"></input></p>
-        <p><input type="button" class="btn btn-primary"  id="line" value="Line" /></p>
-        <p><input type="button" class="btn" id="squiggle" value="Freehand" /></p>
-        <p><input type="button" class="btn" id="box" value="Box" /></p>
-        <p><input type="button" class="btn" id="add-actor" value="Add a token" /></p>
-        <p><input type="button" class="btn" id="move-actor" value="Move tokens" /></p>
-        <p><input type="button" class="btn" id="clear" value="Clear Current Layer" /></p>
-    </div>
-</aside>
-<div id="character_sheet" class="container-fluid">
-    <div class="row">
-        <div class="col-sm-8">
-            <h2>
-                <a href="/character/edit/{{$character->id}}">{{$character->name}}</a></h2>
-                    <h2>Level {{$character->level}} {{$character->heritage->title}}</h2>
-                @foreach($character->background as $background)
-                    <p>{{$background->title}} - {{$background->content}}</p>
-                @endforeach
-
-            </h2>
-            <p>{{$character->description}}</p>
-        </div>
-        <div class="col-sm-4">
-        <h3>Edges 
-            <a href="#" class="toggle_edit"><span class="glyphicon glyphicon-edit"></a>
-            <a href="/character/set_edges/{{$character->id}}"><span class="edit glyphicon glyphicon-plus"></span></a>
-        </h3>
-        @foreach($character->edge as $edge)
-            <p title="{{$edge->content}}" data-edge-id="{{$edge->id}}"><span class="edit remove_edge"> <span class="glyphicon glyphicon-remove"></span> </span>{{$edge->title}} - {{$edge->slug}}</p>
-        @endforeach
-        </div>
-
-        <div class="col-sm-6">
-        
-        <h3>Skills <a href="#" class="toggle_edit"><span class="glyphicon glyphicon-edit"></a> <a href=#  id="use_focus">Use Focus</a>  </h3>
-
-        <div id="character_skills"></div>
-        <table class="skill_table table">
-            <thead>
-                <tr>
-                    <th>Skill</th>
-                    <th class="edit"></th>
-                    <th>Points</th>
-                    <th class="edit"></th>
-                    <th class="edit"></th>
-                    <th>Bonus</th>
-                    <th class="edit"></th>
-                    <th>Total</th>
-                    <th>Roll</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>General</td>
-                    <td class="skill_points">0</td>
-                <td class="edit"></td>
-                    <td class="skill_bonus">0</td>
-                <td class="edit"></td>
-                <td class="edit"></td>
-                    <td class="skill_total">0</td>
-                <td class="edit"></td>
-                    <td class="roll_dice">+ 0
-                        <span class="skill_unfocus_penalty" style="color: red"> -1 </span></td>
-                </tr>
-
-        @foreach($character->skill as $skill)
-                <tr data-skill-id="{{$skill->id}}">
-                    <td title="{{$skill->content}}"><span class="edit remove_skill"> <span class="glyphicon glyphicon-remove"></span> </span>{{$skill->title}}</td>
-                    <td class="points edit minus"><a href=#>-</a></td>
-                    <td class="skill_points">{{$skill->pivot->points}}</td>
-                    <td class="points edit plus"><a href=#>+</a></td>
-                    <td class="bonus edit minus"><a href=#>-</a></td>
-                    <td class="skill_bonus">{{$skill->pivot->bonus}}</td>
-                    <td class="bonus edit plus"><a href=#>+</a></td>
-                    <td class="skill_total">{{$skill->pivot->total}}</td>
-                    <td class="roll_dice">
-                         + <span class="skill_total">{{$skill->pivot->total}}</span> 
-                         <span class="skill_unfocus_penalty" style="color: red"> -1 </span>
-                    </td>
-                </tr>
-        @endforeach
-            </tbody>
-        </table>
-        <div class="edit">
-            {!! Form::model($character) !!}
-            <p>
-                {!! Form::select('add_skill', $learnable_skills) !!}
-
-              {!! Form::submit('Add', ['id'=>'add_skill']) !!}
-              {!! Form::close() !!}
-
-            </p>
-        </div>
-        </div>
-        <div class="col-sm-6">
-            <h3>Combat stuff</h2>
+        <div>
+            <!-- notes on how combat works - need to be relocated as they're too verbose for the available sapce.
             <p>Start combat with 1 focus, gain 1 at the beginning of each of your turns, lose one whenever you get hit. Reset your unfocus at the beginning of your turn.</p>
+            -->
             <h4>
-                Currently  <span id="combat_status">Fighting!</span> <a href=# id="combat_off"><img src="/img/nocombat32.png" alt="combat off" /></a>
+                Currently  <span id="combat_status">in combat</span> <a href=# id="combat_off"><img src="/img/nocombat32.png" alt="combat off" /></a>
  <a href=# id="combat_on"><img src="/img/combat32.png" alt="combat on" /></a>
             </h4>
             <h4>
-                Current Focus: <span id="focus">1</span> <span id="add_focus" class="glyphicon glyphicon-plus"></span> <span id="remove_focus" class="glyphicon glyphicon-minus"></span>
-
-            <h4>    
-                Unfocussed Penalty: <span id="unfocus">-1</span> 
-            </h4>
+                Focus: <span id="focus">1</span>
+                <span id="add_focus" class="glyphicon glyphicon-plus"></span>
+                <span id="remove_focus" class="glyphicon glyphicon-minus"></span>
             <h4>
-                Reset Unfocus: <a href=# id="reset_dice"><img src="/img/reset32.png" alt="reset" /></a>
+                Unfocussed Penalty: <span id="unfocus">-1</span>
+                <a href=# id="reset_dice"><span class="glyphicon glyphicon-refresh"></span></a>
             </h4>
             <h4>Current situational adjustment: <span id="situational_slider_label">0</span>
                 <input id="situational_slider" type="range" min="-3" max="3" step="1" />
@@ -139,27 +37,185 @@
             </h4>
         </div>
 
-        <div class="col-sm-8">
-            <h3>Chat</h3>
+        <div>
             <ul id="chat_messages">
-            <li>...</li>
+                <li>...</li>
             </ul>
-
-        </div>
-
-        <div class="col-sm-4">
-
-        <h3>Stuff</h3>
-            {!! Form::model($character) !!}
-            {!! Form::label('inventory') !!}
-            {!! Form::textarea('inventory')!!}
-            {!! Form::close() !!}
             <p>Chat:<input type="text" id="chat-box"></input></p>
         </div>
+    </div>
 
-        <div class="col-sm-12">
-            <canvas id="drawing-board" width="750" height="500px"></canvas>
+    <!--
+    <h3>Update</h3>
+    <p><a href="/character/set_backgrounds/{{$character->id}}">Backgrounds</a></p>
+    <p><a href="/character/set_edges/{{$character->id}}">Edges</a></p>
+    -->
+</aside>
+<div id="character_sheet" class="container-fluid">
+    <div class="row">
+        <!-- user selectable content - choice of canvas or editable character bits-->
+        <div class="col-sm-9">
+            <h3>
+                <a href=# id="show-character">Character</a> |
+                <a href=# id="show-canvas">Map</a> |
+                <a href=# id="show-edges">Edges</a> |
+                <a href=# id="show-skills">Skills</a>
+            </h3>
+            <div class="main-pane-character">
+                <h2>
+                    <a href="/character/edit/{{$character->id}}">{{$character->name}}</a>
+                </h2>
+                <h2>Level {{$character->level}} {{$character->heritage->title}}</h2>
+            @foreach($character->background as $background)
+                <p>{{$background->title}} - {{$background->content}}</p>
+            @endforeach
+
+            <p>{{$character->description}}</p>
+            </div>
+
+            <div class="main-pane-canvas">
+                <canvas id="drawing-board" width="750" height="500"></canvas>
+                <div>
+                    Colour: <input type="color" id="drawing-colour"></input>
+                    <input type="button" class="btn btn-primary"  id="line" value="Line" />
+                    <input type="button" class="btn" id="squiggle" value="Freehand" />
+                    <input type="button" class="btn" id="box" value="Box" />
+                    <input type="button" class="btn" id="add-actor" value="Add a token" />
+                    <input type="button" class="btn" id="move-actor" value="Move tokens" />
+                    <input type="button" class="btn" id="clear" value="Clear Current Layer" />
+                </div>
+            </div>
+
+            <div class="main-pane-skills">
+                <h3>Skills <a href="#" class="toggle_edit">
+                    <span class="glyphicon glyphicon-edit"></span></a>
+                </h3>
+
+                <div id="character_skills">
+                    <table class="skill_table table">
+                        <thead>
+                            <tr>
+                                <th>Skill</th>
+                                <th class="edit"></th>
+                                <th>Points</th>
+                                <th class="edit"></th>
+                                <th class="edit"></th>
+                                <th>Bonus</th>
+                                <th class="edit"></th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>General</td>
+                                <td class="edit"></td>
+                                <td class="skill_points">0</td>
+                                <td class="edit"></td>
+                                <td class="edit"></td>
+                                <td class="skill_bonus">0</td>
+                                <td class="edit"></td>
+                                <td class="skill_total">0</td>
+                            </tr>
+
+                        @foreach($character->skill as $skill)
+                            <tr data-skill-id="{{$skill->id}}">
+                                <td title="{{$skill->content}}"><span class="edit remove_skill"> <span class="glyphicon glyphicon-remove"></span> </span>{{$skill->title}}</td>
+                                <td class="points edit minus"><a href=#>-</a></td>
+                                <td class="skill_points">{{$skill->pivot->points}}</td>
+                                <td class="points edit plus"><a href=#>+</a></td>
+                                <td class="bonus edit minus"><a href=#>-</a></td>
+                                <td class="skill_bonus">{{$skill->pivot->bonus}}</td>
+                                <td class="bonus edit plus"><a href=#>+</a></td>
+                                <td class="skill_total">{{$skill->pivot->total}}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <div class="edit">
+                        {!! Form::model($character) !!}
+                        <p>
+                            {!! Form::select('add_skill', $learnable_skills) !!}
+                            {!! Form::submit('Add', ['id'=>'add_skill']) !!}
+                            {!! Form::close() !!}
+                        </p>
+                    </div>
+                </div>
+            </div> <!-- end skills pane -->
+
+            <!-- edges pane -->
+            <div class="main-pane-edges">
+                <h3>Edges
+                    <a href="#" class="toggle_edit"><span class="glyphicon glyphicon-edit"></a>
+                    <a href="/character/set_edges/{{$character->id}}"><span class="edit glyphicon glyphicon-plus"></span></a>
+                </h3>
+                @foreach($character->edge as $edge)
+                    <div data-edge-id="{{$edge->id}}">
+                        <h4>
+                            <span class="edit remove_edge">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </span>
+                            {{ $edge->title }}
+                        </h4>
+                        <p>{!! nl2br($edge->content) !!}</p>
+                    </div>
+                @endforeach
+            </div>
+
+
+        </div> <!-- end col-sm-9 -->
+
+        <!-- small sidebar info -->
+        <div class="col-sm-3">
+
+
+            <!-- Skills summary -->
+
+            <h3>Skills
+                <input type="button" class="btn" id="use_focus" value="Use Focus" />
+            </h3>
+
+            <div id="character_skills_summary">
+                <table class="skill_table table">
+                    <thead>
+                        <tr>
+                            <th>Skill</th>
+                            <th>Roll</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>General</td>
+                            <td class="roll_dice">+ <span class="skill_total">0</span>
+                                <span class="skill_unfocus_penalty" style="color: red"> -1 </span>
+                            </td>
+                        </tr>
+
+                @foreach($character->skill as $skill)
+                        <tr data-skill-id="{{$skill->id}}">
+                            <td title="{{$skill->content}}">{{$skill->title}}</td>
+                            <td class="roll_dice">
+                                 + <span class="skill_total">{{$skill->pivot->total}}</span>
+                                 <span class="skill_unfocus_penalty" style="color: red"> -1 </span>
+                            </td>
+                        </tr>
+                @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <!-- edges summary -->
+            <h3>Edges</h3>
+            @foreach($character->edge as $edge)
+            <p title="{{$edge->content}}" data-edge-id="{{$edge->id}}">{{ $edge->title }}</p>
+            @endforeach
+            <div class="character_inventory_summary">
+                <h3>Inventory</h3>
+                {!! Form::model($character) !!}
+                {!! Form::label('inventory') !!}
+                {!! Form::textarea('inventory')!!}
+                {!! Form::close() !!}
+            </div>
         </div>
+
     </div>
 </div>
 </div>
@@ -185,8 +241,8 @@
             if (new_obj[0].obj_type == 'actor'){
                 actors = [];
             }
-            
-            for (var i = 0; i < new_obj.length; i++){ 
+
+            for (var i = 0; i < new_obj.length; i++){
                 switch (new_obj[i].obj_type){
                     case "line":
                     var incoming_line = new Line(new_obj[i].startX, new_obj[i].startY, new_obj[i].endX, new_obj[i].endY, new_obj[i].line_style);
@@ -309,11 +365,11 @@
               this.line_style = "black";
             }
         }
-        
+
         var Layer = function(description){
             this.description = description;
             this.shapes = [];
-        } 
+        }
 
         function refresh_canvas(context){
             context.clearRect(0, 0, 750, 500);
@@ -337,7 +393,7 @@
               context.moveTo(0, i * scale * 40 + 0.5 + (scale * canvas_offset_y % (scale * 40)));
               context.lineTo(750, i * scale * 40 + 0.5 + (scale * canvas_offset_y % (scale * 40)));
             }
-        
+
           context.strokeStyle = "lightgrey";
           context.stroke();
       }
@@ -375,7 +431,7 @@
       function broadcast_layer(layer){
           conn.send(JSON.stringify(layer));
       }
- 
+
       function clear_a_layer(layer) {
         if(layer == "background_items"){
           background_items = [];
@@ -385,7 +441,7 @@
         }
         if(layer == "actors"){
           actors = [];
-        } 
+        }
         refresh_canvas(context);
       }
 
@@ -410,8 +466,8 @@
       context.fillStyle = "white";
       context.fillRect(0,0,750,500);
       refresh_canvas(context);
-      
-      
+
+
       $('#line').on('click', function(event){
         canvas_click_action = "line";
         active_layer = "foreground_items";
@@ -457,7 +513,7 @@
             console.log("moving...");
             update_offset_x = event.offsetX;
             update_offset_y = event.offsetY;
-        } 
+        }
         else if(canvas_click_action == "line"){
           next_line.set_start(event.offsetX / scale - canvas_offset_x, event.offsetY / scale - canvas_offset_y, $('#drawing-colour').val());
         }
@@ -567,7 +623,7 @@
         drawing = false;
         //conn.send({"background": background_items, "foreground": foreground_items, "actors": actors});
         refresh_canvas(context);
-      });   
+      });
       $('#drawing-board').on('mousewheel', function(event) {
         if (event.originalEvent.wheelDelta > 0 && scale < 5) {
           scale = scale * 1.05;
@@ -622,7 +678,7 @@
 
         })
     }
-    
+
     $('input#chat-box').on('keyup', function(event) {
         if (event.which == 13 || event.keyCode == 13){
             user_message = $(this).val();
@@ -634,15 +690,21 @@
             $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight}, 1000);
         }
     });
-    
+
     //dice stuff
     var use_focus = false;
 
     $('#use_focus').on('click', function(event) {
+      if(!use_focus) {
         use_focus = true;
-        $('#use_focus').text('Using Focus');
+        $('#use_focus').val('Using Focus');
         $('.skill_unfocus_penalty').text(' ');
         event.preventDefault();
+      } else {
+        use_focus = false;
+        $('#use_focus').val('Use Focus');
+        $('.skill_unfocus_penalty').text(parseInt($('#unfocus').text()));
+      }
     });
     $('.roll_dice').click( function() {
         //set dice to 0 and hide them.
@@ -654,7 +716,7 @@
         var n = 3; //parseInt($(this).find('.num_dice').text());
 
         //get total modifier for currently selected skill.
-        var mod = parseInt($(this).siblings('.skill_total').text()) + parseInt($('#situational_slider').val());
+        var mod = parseInt($(this).find('.skill_total').text()) + parseInt($('#situational_slider').val());
         var focus = parseInt($('#focus').text());
         var unfocus = parseInt($('#unfocus').text());
         console.log('Unfocus penalty: ' + unfocus);
@@ -667,7 +729,7 @@
             }
         } else {
             use_focus = false;
-            $('#use_focus').text('Use Focus');
+            $('#use_focus').val('Use Focus');
             $('#focus').text(focus - 1);
             check_message_append = ' (Focused)';
         }
@@ -676,7 +738,7 @@
             $(this).text(unfocus);
         });
         $('#mod').text(mod);
-        
+
         //roll n dice. rolled dice become visible.
         //diminish n if appropriate
         switch(n){
@@ -699,7 +761,7 @@
         var check_type = $(this).siblings('td').first().text();
         var check_total = $('#dice_total').text();
         user_roll_message.message = " uses " + check_type + " and scores " + check_total + check_message_append ;
-        
+
         $('#chat_messages li').last().append('<li>' + user_roll_message.display_name + ' '  + user_roll_message.message + '</li>');
         $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight}, 1000);
         conn.send(JSON.stringify([user_roll_message]));
@@ -710,22 +772,20 @@
         roll_d6('#' + $(this).attr('id') );
         update_total();
     });
-    
+
     //player end diminishment management
     $('#combat_on').click(function (e) {
         status = "combat_on";
         $('#combat_off').css('opacity', '0.5');
         $('#reset_dice').css('opacity', '1');
         $('#combat_on').css('opacity', '1')
-        $('#combat_status').text('Fighting!');
+        $('#combat_status').text('in combat');
         $('.skill_unfocus_penalty').show();
         e.preventDefault();
     });
     $('#combat_off').click(function (e) {
         //this seems to be doing nothing. scope issue?
         status = "combat_off";
-        //set all dice spans to 3
-        $('.num_dice').text('3');
         $('#combat_on').css('opacity', '0.5');
         $('#reset_dice').css('opacity', '0.5');
         $('#combat_off').css('opacity', '1');
@@ -738,7 +798,7 @@
         $('.edit').toggle();
     });
     $('#reset_dice').click(function (e) {
-        //set all dice spans to 3
+        //set unfocus penalty to -1
         $('#unfocus').text('-1');
         $('.skill_unfocus_penalty').each(function() {
             $(this).text('-1');
@@ -757,7 +817,7 @@
     });
     $('#get_hit_location').on('click', function(e) {
         e.preventDefault();
-        $(this).fadeOut();
+        $(this).hide();
         var hit_location_number = Math.floor(Math.random()*6) + 1;
         var hit_location = "";
         switch(hit_location_number) {
@@ -782,22 +842,46 @@
         }
         $(this).val(hit_location);
         $(this).fadeIn();
-        
+
     });
     $('#situational_slider').on('change', function(e) {
         var slider_val = $(this).val();
         $('#situational_slider_label').text(slider_val);
     });
-    
+
+    //main pane management
+    $('.main-pane-character').siblings('div').hide();
+    $('#show-character').on('click', function(event) {
+        event.preventDefault();
+        $('.main-pane-character').siblings('div').hide();
+        $('.main-pane-character').fadeIn(800);
+    });
+    $('#show-canvas').on('click', function(event) {
+        event.preventDefault();
+        $('.main-pane-canvas').siblings('div').hide();
+        $('.main-pane-canvas').fadeIn(800);
+    });
+    $('#show-edges').on('click', function(event) {
+        event.preventDefault();
+        $('.main-pane-edges').siblings('div').hide();
+        $('.main-pane-edges').fadeIn(800);
+    });
+    $('#show-skills').on('click', function(event) {
+        event.preventDefault();
+        $('.main-pane-skills').siblings('div').hide();
+        $('.main-pane-skills').fadeIn(800);
+    });
 
     $('.minus a').click( function(event) {
         event.preventDefault();
         new_value=parseInt($(this).parent().next().text());
         new_value--;
         $(this).parent().next().text(new_value);
-        skill_total = parseInt($(this).parent().siblings('td').find('.skill_total').text());
+        skill_total = parseInt($(this).parent().parent().find('.skill_total').text());
         skill_total--;
         $(this).parent().parent().find('.skill_total').text(skill_total);
+        skill_id = $(this).parent().parent().data('skill-id');
+        $('#character_skills_summary').find("tr[data-skill-id='" + skill_id + "']").find('.skill_total').text(skill_total);
         save_skill_values($(this).parent().parent());
     });
 
@@ -806,9 +890,11 @@
         new_value=parseInt($(this).parent().prev().text());
         new_value++;
         $(this).parent().prev().text(new_value);
-        skill_total = parseInt($(this).parent().siblings('td').find('.skill_total').text());
+        skill_total = parseInt($(this).parent().parent().find('.skill_total').text());
         skill_total++;
         $(this).parent().parent().find('.skill_total').text(skill_total);
+        skill_id = $(this).parent().parent().data('skill-id');
+        $('#character_skills_summary').find("tr[data-skill-id='" + skill_id + "']").find('.skill_total').text(skill_total);
         save_skill_values($(this).parent().parent());
     });
         //Save inventory on keyup.
@@ -889,6 +975,7 @@
             event.preventDefault();
             console.log('request made');
             $edge_id = $(this).closest('p').data('edge-id');
+            edge_html = $(this).closest('p');
             $character_id = {{$character->id}};
             console.log($edge_id);
             $.ajax({
@@ -902,10 +989,11 @@
             success: function(data) {
                 console.log(data);
                 //remove the edge from the display
+                edge_html.hide();
                 }
             })
         })
-        
+
     });
 </script>
 

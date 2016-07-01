@@ -74,7 +74,7 @@ class CharacterController extends Controller {
 		$skills = Skill::all();
 		$learnable_skills = $skills->diff($character->skill);
 		$learnable_skills = $learnable_skills->lists('title', 'id');
-	        $user_name = Auth::user()->name;
+    $user_name = Auth::user()->name;
 		foreach ($character->skill as $skill):
 			//calc skill totals from points and bonuses
 			//can't use a virtual field because the pivot doesn't really exist
@@ -83,8 +83,8 @@ class CharacterController extends Controller {
 
         return view('character.view')
             ->with('character', $character)
-	    ->with('learnable_skills', $learnable_skills)
-	    ->with('user_name', $user_name);
+            ->with('learnable_skills', $learnable_skills)
+            ->with('user_name', $user_name);
 	}
 
 	/**
@@ -130,7 +130,6 @@ class CharacterController extends Controller {
         $character->heritage_id = $request->heritage_id;
         $character->description = $request->description;
         $character->level = $request->level;
-        $character->user_id = Auth::User()->id;
 
         $character->save();
 
@@ -211,7 +210,7 @@ class CharacterController extends Controller {
 		$character->edge()->attach($request->edge_id);
 
 		return redirect()->route('character.view', [$id]);
-	}	
+	}
 
 	public function ajax_remove_edge(Request $request){
 		try{
@@ -222,7 +221,7 @@ class CharacterController extends Controller {
             return $ex;
         }
 		return 1;
-	
+
 	}
 	public function ajax_add_skill(Request $request){
 		$character = Character::find($request->character_id);
@@ -236,9 +235,9 @@ class CharacterController extends Controller {
 		$character = Character::find($request->character_id);
 		$character->skill()->updateExistingPivot($request->skill_id, ['points' => $request->skill_points, 'bonus' => $request->skill_bonus]);
 		return 1;
-	
+
 	}
-    
+
 	public function ajax_remove_skill(Request $request){
 		try{
             $character = Character::find($request->character_id);
@@ -248,7 +247,7 @@ class CharacterController extends Controller {
             return $ex;
         }
 		return 1;
-	
+
 	}
 		 /**
 	 * Show the form for assigning skills to a character. No separate method for adding.
