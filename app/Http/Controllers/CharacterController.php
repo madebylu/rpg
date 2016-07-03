@@ -55,6 +55,8 @@ class CharacterController extends Controller {
         $character->heritage_id = $request->heritage_id;
         $character->description = $request->description;
         $character->level = $request->level;
+        $character->armour = $request->armour;
+        $character->boons_max = $request->boons_max;
         $character->user_id = Auth::User()->id;
 
         $character->save();
@@ -74,7 +76,7 @@ class CharacterController extends Controller {
 		$skills = Skill::all();
 		$learnable_skills = $skills->diff($character->skill);
 		$learnable_skills = $learnable_skills->lists('title', 'id');
-    $user_name = Auth::user()->name;
+        $user_name = Auth::user()->name;
 		foreach ($character->skill as $skill):
 			//calc skill totals from points and bonuses
 			//can't use a virtual field because the pivot doesn't really exist
@@ -130,6 +132,8 @@ class CharacterController extends Controller {
         $character->heritage_id = $request->heritage_id;
         $character->description = $request->description;
         $character->level = $request->level;
+        $character->armour = $request->armour;
+        $character->boons_max = $request->boons_max;
 
         $character->save();
 
@@ -325,6 +329,50 @@ class CharacterController extends Controller {
 		$character->save();
 	}
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update_notes(Request $request)
+    {
+        $character = Character::find($request->id);
+
+        $character->notes = $request->notes;
+
+        $character->save();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update_boons_current(Request $request)
+    {
+        $character = Character::find($request->id);
+
+        $character->boons_current = $request->boons_current;
+
+        $character->save();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update_wounds_text(Request $request)
+    {
+        $character = Character::find($request->id);
+
+        $character->wounds_text = $request->wounds_text;
+
+        $character->save();
+    }
 
 	/**
 	 * Remove the specified resource from storage.

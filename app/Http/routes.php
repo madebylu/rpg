@@ -48,6 +48,9 @@ Route::post('/character/ajax_remove_edge', ['as' => 'character.ajax_remove_edge'
 Route::get('/character/set_skills/{id}', 'CharacterController@edit_skills');
 Route::post('/character/set_skills/{id}', ['as' => 'character.store_skills','uses' =>'CharacterController@store_skills']);
 Route::post('/character/update_inventory', ['as' => 'character.update_inventory','uses' =>'CharacterController@update_inventory']);
+Route::post('/character/update_notes', ['as' => 'character.update_notes','uses' =>'CharacterController@update_notes']);
+Route::post('/character/update_wounds_text', ['as' => 'character.update_wounds_text','uses' =>'CharacterController@update_wounds_text']);
+Route::post('/character/update_boons_current', ['as' => 'character.update_boons_current','uses' =>'CharacterController@update_boons_current']);
 Route::post('/character/ajax_add_skill', ['as' => 'character.ajax_add_skill','uses' =>'CharacterController@ajax_add_skill']);
 Route::post('/character/ajax_update_skill', ['as' => 'character.ajax_update_skill','uses' =>'CharacterController@ajax_update_skill']);
 Route::post('/character/ajax_remove_skill', ['as' => 'character.ajax_remove_skill','uses' =>'CharacterController@ajax_remove_skill']);

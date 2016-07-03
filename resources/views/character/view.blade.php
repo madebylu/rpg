@@ -17,31 +17,51 @@
             <!-- notes on how combat works - need to be relocated as they're too verbose for the available sapce.
             <p>Start combat with 1 focus, gain 1 at the beginning of each of your turns, lose one whenever you get hit. Reset your unfocus at the beginning of your turn.</p>
             -->
-            <h4>
-                Currently  <span id="combat_status">in combat</span> <a href=# id="combat_off"><img src="/img/nocombat32.png" alt="combat off" /></a>
+            <p style="clear: both">
+                <span id="combat_status">in combat</span><br /> <a href=# id="combat_off"><img src="/img/nocombat32.png" alt="combat off" /></a>
  <a href=# id="combat_on"><img src="/img/combat32.png" alt="combat on" /></a>
-            </h4>
-            <h4>
+            </p>
+            <p>
                 Focus: <span id="focus">1</span>
                 <span id="add_focus" class="glyphicon glyphicon-plus"></span>
                 <span id="remove_focus" class="glyphicon glyphicon-minus"></span>
-            <h4>
+            <p>
                 Unfocussed Penalty: <span id="unfocus">-1</span>
                 <a href=# id="reset_dice"><span class="glyphicon glyphicon-refresh"></span></a>
-            </h4>
-            <h4>Current situational adjustment: <span id="situational_slider_label">0</span>
+            </p>
+            <p>
+                Boons: <span id="boons">{{ $character->boons_current }}</span> / {{ $character->boons_max }}
+                <span id="reset_boons" class="glyphicon glyphicon-refresh"></span>
+            <p>
+            <p>
+                Armour: <span id="armour">{{ $character->armour }}</span>
+            </p>
+            <p>
+                Fatigue: <span id="fatigue">0</span>
+                <span id="add_fatigue" class="glyphicon glyphicon-plus"></span>
+                <span id="remove_fatigue" class="glyphicon glyphicon-minus"></span>
+            </p>
+            <p>
+                Advantage: <span id="situational_slider_label">0</span>
                 <input id="situational_slider" type="range" min="-3" max="3" step="1" />
-            </h4>
-            <h4>
-                <input type="button" class="btn" id="get_hit_location" value="Roll for hit location">
-            </h4>
+            </p>
+            <p>
+                <input type="button" class="btn" id="get_hit_location" value="Get hit location">
+            </p>
         </div>
 
         <div>
             <ul id="chat_messages">
                 <li>...</li>
             </ul>
-            <p>Chat:<input type="text" id="chat-box"></input></p>
+            <p><input type="text" id="chat-box"></input></p>
+        </div>
+
+        <div id="character_wounds">
+            {!! Form::model($character) !!}
+            {!! Form::label('wounds_text', 'Wounds') !!}
+            {!! Form::textarea('wounds_text')!!}
+            {!! Form::close() !!}
         </div>
     </div>
 
@@ -61,7 +81,7 @@
                 <a href=# id="show-edges">Edges</a> |
                 <a href=# id="show-skills">Skills</a>
             </h3>
-            <div class="main-pane-character">
+            <div class="main-pane main-pane-character">
                 <h2>
                     <a href="/character/edit/{{$character->id}}">{{$character->name}}</a>
                 </h2>
@@ -73,7 +93,7 @@
             <p>{{$character->description}}</p>
             </div>
 
-            <div class="main-pane-canvas">
+            <div class="main-pane main-pane-canvas">
                 <canvas id="drawing-board" width="750" height="500"></canvas>
                 <div>
                     Colour: <input type="color" id="drawing-colour"></input>
@@ -86,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="main-pane-skills">
+            <div class="main-pane main-pane-skills">
                 <h3>Skills <a href="#" class="toggle_edit">
                     <span class="glyphicon glyphicon-edit"></span></a>
                 </h3>
@@ -119,14 +139,19 @@
 
                         @foreach($character->skill as $skill)
                             <tr data-skill-id="{{$skill->id}}">
-                                <td title="{{$skill->content}}"><span class="edit remove_skill"> <span class="glyphicon glyphicon-remove"></span> </span>{{$skill->title}}</td>
+                                <td title="{{$skill->content}}">
+                                    <span class="edit remove_skill">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </span>
+                                    {{ $skill->title }}
+                                </td>
                                 <td class="points edit minus"><a href=#>-</a></td>
-                                <td class="skill_points">{{$skill->pivot->points}}</td>
+                                <td class="skill_points">{{ $skill->pivot->points }}</td>
                                 <td class="points edit plus"><a href=#>+</a></td>
                                 <td class="bonus edit minus"><a href=#>-</a></td>
-                                <td class="skill_bonus">{{$skill->pivot->bonus}}</td>
+                                <td class="skill_bonus">{{ $skill->pivot->bonus }}</td>
                                 <td class="bonus edit plus"><a href=#>+</a></td>
-                                <td class="skill_total">{{$skill->pivot->total}}</td>
+                                <td class="skill_total">{{ $skill->pivot->total }}</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -143,7 +168,7 @@
             </div> <!-- end skills pane -->
 
             <!-- edges pane -->
-            <div class="main-pane-edges">
+            <div class="main-pane main-pane-edges">
                 <h3>Edges
                     <a href="#" class="toggle_edit"><span class="glyphicon glyphicon-edit"></a>
                     <a href="/character/set_edges/{{$character->id}}"><span class="edit glyphicon glyphicon-plus"></span></a>
@@ -159,6 +184,13 @@
                         <p>{!! nl2br($edge->content) !!}</p>
                     </div>
                 @endforeach
+            </div>
+
+            <div id="character_notes">
+                {!! Form::model($character) !!}
+                {!! Form::label('notes') !!}
+                {!! Form::textarea('notes')!!}
+                {!! Form::close() !!}
             </div>
 
 
@@ -203,11 +235,14 @@
                 </table>
             </div>
             <!-- edges summary -->
-            <h3>Edges</h3>
-            @foreach($character->edge as $edge)
-            <p title="{{$edge->content}}" data-edge-id="{{$edge->id}}">{{ $edge->title }}</p>
-            @endforeach
-            <div class="character_inventory_summary">
+            <div id="character_edges_summary">
+
+                <h3>Edges</h3>
+                @foreach($character->edge as $edge)
+                <p title="{{$edge->content}}" data-edge-id="{{$edge->id}}">{{ $edge->title }}</p>
+                @endforeach
+            </div>
+            <div id="character_inventory_summary">
                 <h3>Inventory</h3>
                 {!! Form::model($character) !!}
                 {!! Form::label('inventory') !!}
@@ -650,9 +685,12 @@
 
         function update_total(){
             var new_total =
-                parseInt($('#d1').text()) +
-                parseInt($('#d2').text()) +
-                parseInt($('#d3').text()) +
+                Math.min(
+                    parseInt($('#d1').text()) +
+                    parseInt($('#d2').text()) +
+                    parseInt($('#d3').text()),
+                    18 - parseInt($('#fatigue').text())  //cap roll before score at 18 - fatigue
+                ) +
                 parseInt($('#mod').text());
             $('#dice_total').text(new_total);
         }
@@ -769,8 +807,35 @@
 
     //rerolling single dice for boons etc
     $('.reroll').click(function(e){
-        roll_d6('#' + $(this).attr('id') );
-        update_total();
+        boons = parseInt($('#boons').text());
+        //if the character has a boon, spend it to reroll a dice
+        if (boons > 0){
+            roll_d6('#' + $(this).attr('id') );
+            update_total();
+            boons--;
+            $('#boons').text(boons);
+            //need to send a chat message about the reroll:
+            var check_total = $('#dice_total').text();
+            var user_roll_message = {"obj_type": "check", "display_name": "{{ $character->name }}", "message": "made a check"};
+
+            user_roll_message.message = " uses divine power and scores " + check_total + " instead" ;
+
+            $('#chat_messages li').last().append('<li>' + user_roll_message.display_name + ' '  + user_roll_message.message + '</li>');
+            $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight}, 1000);
+            conn.send(JSON.stringify([user_roll_message]));
+
+            //finally, update boons_current in the database
+            $.ajax({
+                method: "POST",
+                url: "/character/update_boons_current",
+                data:{
+                    _token: "{{ csrf_token() }}",
+                    id: "{{ $character->id }}",
+                    boons_current: boons
+                }
+
+            })
+        }
     });
 
     //player end diminishment management
@@ -815,6 +880,30 @@
         $('#focus').text(focus - 1);
         e.preventDefault();
     });
+    $('#add_fatigue').click(function (e) {
+        var fatigue = parseInt($('#fatigue').text());
+        $('#fatigue').text(fatigue + 1);
+        e.preventDefault();
+    });
+    $('#remove_fatigue').click(function (e) {
+        var fatigue = parseInt($('#fatigue').text());
+        $('#fatigue').text(fatigue - 1);
+        e.preventDefault();
+    });
+    $('#reset_boons').click(function (e) {
+        $('#boons').text( {{ $character->boons_max }} );
+        $.ajax({
+            method: "POST",
+            url: "/character/update_boons_current",
+            data:{
+                _token: "{{ csrf_token() }}",
+                id: "{{ $character->id }}",
+                boons_current: {{ $character->boons_max }}
+            }
+
+        })
+        e.preventDefault();
+    });
     $('#get_hit_location').on('click', function(e) {
         e.preventDefault();
         $(this).hide();
@@ -850,25 +939,25 @@
     });
 
     //main pane management
-    $('.main-pane-character').siblings('div').hide();
+    $('.main-pane-character').siblings('.main-pane').hide();
     $('#show-character').on('click', function(event) {
         event.preventDefault();
-        $('.main-pane-character').siblings('div').hide();
+        $('.main-pane-character').siblings('.main-pane').hide();
         $('.main-pane-character').fadeIn(800);
     });
     $('#show-canvas').on('click', function(event) {
         event.preventDefault();
-        $('.main-pane-canvas').siblings('div').hide();
+        $('.main-pane-canvas').siblings('.main-pane').hide();
         $('.main-pane-canvas').fadeIn(800);
     });
     $('#show-edges').on('click', function(event) {
         event.preventDefault();
-        $('.main-pane-edges').siblings('div').hide();
+        $('.main-pane-edges').siblings('.main-pane').hide();
         $('.main-pane-edges').fadeIn(800);
     });
     $('#show-skills').on('click', function(event) {
         event.preventDefault();
-        $('.main-pane-skills').siblings('div').hide();
+        $('.main-pane-skills').siblings('.main-pane').hide();
         $('.main-pane-skills').fadeIn(800);
     });
 
@@ -899,7 +988,6 @@
     });
         //Save inventory on keyup.
         $('#inventory').keyup(function(e){
-
             inventory = $(this).val();
             $.ajax({
                 method: "POST",
@@ -908,6 +996,35 @@
                     _token: "{{csrf_token()}}",
                     id: "{{$character->id}}",
                     inventory: inventory
+                }
+
+            })
+        });
+        //Save notes on keyup.
+        $('#notes').keyup(function(e){
+            notes = $(this).val();
+            $.ajax({
+                method: "POST",
+                url: "/character/update_notes",
+                data:{
+                    _token: "{{csrf_token()}}",
+                    id: "{{$character->id}}",
+                    notes: notes
+                }
+
+            })
+        });
+
+        //Save wounds text on keyup.
+        $('#wounds_text').keyup(function(e){
+            wounds_text = $(this).val();
+            $.ajax({
+                method: "POST",
+                url: "/character/update_wounds_text",
+                data:{
+                    _token: "{{csrf_token()}}",
+                    id: "{{$character->id}}",
+                    wounds_text: wounds_text
                 }
 
             })
@@ -974,22 +1091,23 @@
         $('.remove_edge').on('click', function(event){
             event.preventDefault();
             console.log('request made');
-            $edge_id = $(this).closest('p').data('edge-id');
-            edge_html = $(this).closest('p');
-            $character_id = {{$character->id}};
-            console.log($edge_id);
+            edge_id = $(this).closest('div').data('edge-id');
+            edge_html = $(this).closest('div');
+            character_id = {{$character->id}};
+            console.log(edge_id);
             $.ajax({
                 method: "POST",
                 url: "/character/ajax_remove_edge",
                 data:{
                     _token: "{{csrf_token()}}",
-                    character_id: $character_id,
-                    edge_id: $edge_id
+                    character_id: character_id,
+                    edge_id: edge_id
                 },
             success: function(data) {
                 console.log(data);
                 //remove the edge from the display
                 edge_html.hide();
+                $('#character_edges_summary').find("p[data-edge-id='" + edge_id + "']").hide();
                 }
             })
         })
