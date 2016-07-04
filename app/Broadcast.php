@@ -6,9 +6,9 @@ use Ratchet\ConnectionInterface;
 
 class Broadcast implements MessageComponentInterface {
 	protected $clients;
-    protected $background_items;
-    protected $foreground_items;
-    protected $actors;
+    protected $background_items = "{}";
+    protected $foreground_items = "{}";
+    protected $actors = "{}";
 
 	public function __construct() {
 		$this->clients = new \SplObjectStorage;
@@ -17,9 +17,10 @@ class Broadcast implements MessageComponentInterface {
 	public function onOpen(ConnectionInterface $conn) {
 		$this->clients->attach($conn);
 		echo "new connection! ({$conn->resourceId}) \n";
-        $conn->send($background_items);
-        $conn->send($foreground_items);
-        $conn->send($actors);
+        echo $this->background_items;
+        $conn->send($this->background_items);
+        $conn->send($this->foreground_items);
+        $conn->send($this->actors);
 	}
 
 	public function onMessage(ConnectionInterface $from, $msg) {
@@ -30,14 +31,14 @@ class Broadcast implements MessageComponentInterface {
 		}
         //if it's a canvas layer, cache it.
         $passed_obj = json_decode($msg);
-        if ($passed_obj[0].obj_type == 'box'){
-            $background_items = $msg;
+        if ($passed_obj[0]->obj_type == 'box'){
+            $this->background_items = $msg;
         }
-        if ($passed_obj[0].obj_type == 'line'){
-            $foreground_items = $msg;
+        if ($passed_obj[0]->obj_type == 'line'){
+            $this->foreground_items = $msg;
         }
-        if ($passed_obj[0].obj_type == 'actor'){
-            $actors = $msg;
+        if ($passed_obj[0]->obj_type == 'actor'){
+            $this->actors = $msg;
         }
 	}
 
