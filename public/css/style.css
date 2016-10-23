@@ -60,7 +60,6 @@ header h1{
 
 header li{
     color: white;
-    float: right;
     font-size: 1.8em;
     margin: 4px 2px;
 }
@@ -339,7 +338,7 @@ td.edit.plus{
 
 /*Media adjustments*/
 @media screen and (max-width: 500px){
-    #rules{
+    #rules, #settingInformation{
         margin:5em 0 0 1em;
 
     }
@@ -349,6 +348,7 @@ td.edit.plus{
         border-bottom: 2px solid #511;
         border-right: 2px solid #511;
         box-shadow: 1px 0 1px 1px black;
+        display: none;
         float: none;
 	    margin: 0 0 0 0;
         max-height: 100%;
@@ -361,16 +361,6 @@ td.edit.plus{
         z-index: 1050;
     }
 
-    header{
-        background: #222;
-        border-bottom: 2px solid #511;
-        border-left: 2px solid #511;
-        box-shadow: 1px 0 1px 1px black;
-        min-height: 5em;
-        position: fixed;
-        right: 0;
-        top: 0;
-    }
 
     header h1{
         display: none;
