@@ -1,9 +1,5 @@
 @extends('app')
 
-@section('heading')
-<h2>Rules</h2>
-@endsection
-
 @section('content')
 
     <aside>
@@ -69,7 +65,7 @@
         </ul>
     </aside>
     <div id="rules">
-        <h2>Rules</h2>
+        <h1>Rules</h1>
 
         @foreach($rules as $rule)
             <h2 id="{{$rule->section}}.{{$rule->subsection}}">{{$rule->section}}.{{$rule->subsection}} - {{$rule->title }}
@@ -77,7 +73,7 @@
             <p>{!! nl2br($rule->content) !!}</p>
         @endforeach
 
-        <h2>Skills</h2>
+        <h1>Skills</h1>
 
         @foreach($skill_categories as $skill_category)
             <h2 id="{{$skill_category->title}}Skills">{{$skill_category->title}} Skills</h2>
@@ -96,7 +92,7 @@
             @endforeach
         @endforeach
 
-        <h2>Edges</h2>
+        <h1>Edges</h1>
 
         @foreach($edge_categories as $edge_category)
         <h2 id="{{$edge_category->title}}Edges">{{$edge_category->title}} Edges</h2>
@@ -108,7 +104,7 @@
             @endforeach
         @endforeach
 
-        <h2>Items</h2>
+        <h1>Items</h1>
 
         @foreach($item_categories as $item_category)
         <h2 id="{{$item_category->title}}Items">{{$item_category->title}} Items</h2>
@@ -118,8 +114,8 @@
                 <p>{!! nl2br($item->content) !!}</p>
             @endforeach
         @endforeach
-        
-        <h2>Backgrounds</h2>
+
+        <h1>Backgrounds</h1>
         @foreach($backgrounds as $background)
             <h3 id="Background{{$background->id}}">{{$background->title}}<span class="edit"><a href="/background/edit/{{$background->id}}">~</a></span></h3>
             <p>{!! nl2br($background->content) !!}</p>

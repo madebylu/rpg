@@ -50,14 +50,19 @@ header h1{
     box-shadow: 1px 1px 1px 1px black;
     float: left;
     font-family: oswald, serif;
-    margin: 12px 12px 12px -30px;
-    padding: 0 6px;
+    margin: 4px 4px 4px -3px;
+    padding: 4px 6px;
 }
 
-header h2{
+#main-nav{
+    float: right;
+}
+
+header li{
+    color: white;
     float: right;
     font-size: 1.8em;
-    margin: 8px 0;
+    margin: 4px 2px;
 }
 
 /*Menu*/
@@ -66,19 +71,19 @@ nav{
 }
 
 nav a{
-    border-bottom: 2px solid #eef;
     color: #eef;
     font-family: oswald, serif;
     text-decoration: none;
 }
 
 
-nav a:hover{
-    border-bottom: 2px solid #511;
-}
-
 nav p{
     margin:0;
+}
+
+/*overwrite the specific bootstra bit that makes them light grey */
+.navbar-inverse .navbar-nav>li>a{
+    color: white;
 }
 
 
@@ -87,7 +92,7 @@ nav p{
 aside{
 
     float: left;
-    margin: 60px 0 0 0;
+    margin: 70px 0 0 0;
     max-height: calc(100% - 80px);
     min-height: calc(100% - 68px);
     padding: 0 0 0 1em;
@@ -113,11 +118,6 @@ aside li{
     cursor: pointer;
 }
 
-
-aside div{
-    //box-shadow: 0 1px 0 1px black;
-    //  border-bottom: 2px solid #511;
-}
 
 aside h3{
     clear: both;
@@ -300,6 +300,11 @@ form textarea{
  margin-left: 210px;
 }
 
+#rules h2{
+    padding-top: 70px;
+    margin-top: -70px;
+}
+
 #chat_messages{
   height: 150px;
   overflow-y: scroll;
@@ -345,14 +350,15 @@ td.edit.plus{
         border-right: 2px solid #511;
         box-shadow: 1px 0 1px 1px black;
         float: none;
-	margin: 0 0 0 0;
-    max-height: 100%;
-	min-height: 5em;
+	    margin: 0 0 0 0;
+        max-height: 100%;
+        min-height: 5em;
         padding: 0 0 0 1em;
         position: fixed;
         left: 0;
         top: 0px;
-        width: calc(100% - 6.5em);
+        width: calc(100% - 70px);
+        z-index: 1050;
     }
 
     header{
@@ -364,7 +370,6 @@ td.edit.plus{
         position: fixed;
         right: 0;
         top: 0;
-        width: 5em;
     }
 
     header h1{
