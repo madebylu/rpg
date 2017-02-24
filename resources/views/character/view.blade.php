@@ -17,18 +17,10 @@
             <!-- notes on how combat works - need to be relocated as they're too verbose for the available sapce.
             <p>Start combat with 1 focus, gain 1 at the beginning of each of your turns, lose one whenever you get hit. Reset your unfocus at the beginning of your turn.</p>
             -->
-            <p style="clear: both">
-                <span id="combat_status">in combat</span><br /> <a href=# id="combat_off"><img src="/img/nocombat32.png" alt="combat off" /></a>
- <a href=# id="combat_on"><img src="/img/combat32.png" alt="combat on" /></a>
-            </p>
             <p>
                 Focus: <span id="focus">1</span>
                 <span id="add_focus" class="glyphicon glyphicon-plus"></span>
                 <span id="remove_focus" class="glyphicon glyphicon-minus"></span>
-            <p>
-                Unfocussed Penalty: <span id="unfocus">-1</span>
-                <a href=# id="reset_dice"><span class="glyphicon glyphicon-refresh"></span></a>
-            </p>
             <p>
                 Boons: <span id="boons">{{ $character->boons_current }}</span> / {{ $character->boons_max }}
                 <span id="reset_boons" class="glyphicon glyphicon-refresh"></span>
@@ -203,7 +195,6 @@
             <!-- Skills summary -->
 
             <h3>Skills
-                <input type="button" class="btn" id="use_focus" value="Use Focus" />
             </h3>
 
             <div id="character_skills_summary">
@@ -218,7 +209,6 @@
                         <tr>
                             <td>General</td>
                             <td class="roll_dice">+ <span class="skill_total">0</span>
-                                <span class="skill_unfocus_penalty" style="color: red"> -1 </span>
                             </td>
                         </tr>
 
@@ -227,7 +217,6 @@
                             <td title="{{$skill->content}}">{{$skill->title}}</td>
                             <td class="roll_dice">
                                  + <span class="skill_total">{{$skill->pivot->total}}</span>
-                                 <span class="skill_unfocus_penalty" style="color: red"> -1 </span>
                             </td>
                         </tr>
                 @endforeach
@@ -258,7 +247,7 @@
 <script>
 
     $( document ).ready(function() {
-        var conn = new WebSocket('ws://beta.unfetteredhorizons.com:8080');
+        var conn = new WebSocket('ws://rpg.madeby.lu:8080');
         conn.onopen = function(e) {
             console.log("connection made");
         };
@@ -732,66 +721,22 @@
     //dice stuff
     var use_focus = false;
 
-    $('#use_focus').on('click', function(event) {
-      if(!use_focus) {
-        use_focus = true;
-        $('#use_focus').val('Using Focus');
-        $('.skill_unfocus_penalty').text(' ');
-        event.preventDefault();
-      } else {
-        use_focus = false;
-        $('#use_focus').val('Use Focus');
-        $('.skill_unfocus_penalty').text(parseInt($('#unfocus').text()));
-      }
-    });
     $('.roll_dice').click( function() {
         //set dice to 0 and hide them.
         $('#d1, #d2, #d3').text(0);
         $('#d1, #d2, #d3').hide();
 
-        //get number of dice to roll
-        //currently locked at 3 for testing
-        var n = 3; //parseInt($(this).find('.num_dice').text());
 
         //get total modifier for currently selected skill.
         var mod = parseInt($(this).find('.skill_total').text()) + parseInt($('#situational_slider').val());
-        var focus = parseInt($('#focus').text());
-        var unfocus = parseInt($('#unfocus').text());
-        console.log('Unfocus penalty: ' + unfocus);
-        var check_message_append = ' (Unfocused)';
-        if (!use_focus){
-            if (status == "combat_on") {
-                mod = mod + unfocus; //unfocus is a negative
-                unfocus--;
-                $('#unfocus').text(unfocus);
-            }
-        } else {
-            use_focus = false;
-            $('#use_focus').val('Use Focus');
-            $('#focus').text(focus - 1);
-            check_message_append = ' (Focused)';
-        }
-        if (status == "combat_off") { check_message_append = ' (Out of Combat)'; }
-        $('.skill_unfocus_penalty').each(function() {
-            $(this).text(unfocus);
-        });
+        var check_message_append = '';
         $('#mod').text(mod);
 
         //roll n dice. rolled dice become visible.
         //diminish n if appropriate
-        switch(n){
-            case 3:
-                roll_d6('#d3');
-            case 2:
-                roll_d6('#d2');
-                if (status == "combat_on") {
-                    $(this).find('.num_dice').text(n-1);
-                    //$('#focus').text(focus - 1);
-                }
-            case 1:
-                roll_d6('#d1');
-            break;
-        }
+        roll_d6('#d3');
+        roll_d6('#d2');
+        roll_d6('#d1');
 
         update_total();
 
@@ -839,36 +784,9 @@
     });
 
     //player end diminishment management
-    $('#combat_on').click(function (e) {
-        status = "combat_on";
-        $('#combat_off').css('opacity', '0.5');
-        $('#reset_dice').css('opacity', '1');
-        $('#combat_on').css('opacity', '1')
-        $('#combat_status').text('in combat');
-        $('.skill_unfocus_penalty').show();
-        e.preventDefault();
-    });
-    $('#combat_off').click(function (e) {
-        //this seems to be doing nothing. scope issue?
-        status = "combat_off";
-        $('#combat_on').css('opacity', '0.5');
-        $('#reset_dice').css('opacity', '0.5');
-        $('#combat_off').css('opacity', '1');
-        $('#combat_status').text('out of combat');
-        $('.skill_unfocus_penalty').hide();
-        e.preventDefault();
-    });
     $('.toggle_edit').click( function(event) {
         event.preventDefault();
         $('.edit').toggle();
-    });
-    $('#reset_dice').click(function (e) {
-        //set unfocus penalty to -1
-        $('#unfocus').text('-1');
-        $('.skill_unfocus_penalty').each(function() {
-            $(this).text('-1');
-        });
-        e.preventDefault();
     });
     $('#add_focus').click(function (e) {
         var focus = parseInt($('#focus').text());
@@ -1057,7 +975,6 @@
                     <td class='skill_total'>1</td> \
                     <td class='roll_dice'>\
                          + <span class='skill_total'>1</span> \
-                         <span class='skill_unfocus_penalty' style='color: red'> -1 </span>\
                     </td>\
                 ");
                 $('.skill_table').find('tr').last().after($new_row);
