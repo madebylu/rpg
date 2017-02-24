@@ -299,7 +299,7 @@ form textarea{
  margin-left: 210px;
 }
 
-#rules h2{
+#rules h2, #settingInformation h2{
     padding-top: 70px;
     margin-top: -70px;
 }
