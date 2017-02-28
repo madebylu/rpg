@@ -16,6 +16,9 @@
     {!!Form::label('heritage_id', 'Heritages') !!}
     {!!Form::select('heritage_id', $heritages) !!}
 
+    {!!Form::label('game_id', 'Game') !!}
+    {!!Form::select('game_id', $games) !!}
+
     {!!Form::label('description') !!}
     {!!Form::textarea('description') !!}
 

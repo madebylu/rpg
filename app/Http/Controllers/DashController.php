@@ -24,7 +24,7 @@ class DashController extends Controller {
 			} else {
 	        $user_name = Auth::user()->name;
 	        $characters = Character::where('user_id',Auth::user()->id)->orderBy('name')->get();
-            $games = Game::all();
+            $games = Game::orderBy('id', 'desc')->get();
 
             return view('dash.dash')
                 ->with('user_name', $user_name)

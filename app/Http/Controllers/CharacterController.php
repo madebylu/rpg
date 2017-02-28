@@ -10,8 +10,9 @@ use Auth;
 use App\Background;
 use App\Category;
 use App\Character;
-use App\Heritage;
 use App\Edge;
+use App\Heritage;
+use App\Game;
 use App\Skill;
 use App\Http\Requests\CharacterFormRequest;
 use App\Http\Requests\SetBackgroundsFormRequest;
@@ -38,8 +39,11 @@ class CharacterController extends Controller {
 	public function create()
 	{
 		$heritages = Heritage::lists('title', 'id');
+        $games = Game::lists('title', 'id');
 
-        return view('character.form')->with('heritages', $heritages);
+        return view('character.form')
+            ->with('heritages', $heritages)
+            ->with('games', $games);
 	}
 
 	/**
@@ -58,6 +62,7 @@ class CharacterController extends Controller {
         $character->armour = $request->armour;
         $character->boons_max = $request->boons_max;
         $character->user_id = Auth::User()->id;
+        $character->game_id = $request->game_id;
 
         $character->save();
 
@@ -110,10 +115,12 @@ class CharacterController extends Controller {
 	public function edit($id)
 	{
 		$character = Character::find($id);
+        $games = Game::lists('title', 'id');
         $heritages = Heritage::lists('title', 'id');
 
         return view('character.form')
             ->with('character', $character)
+            ->with('games', $games)
             ->with('heritages', $heritages);
 	}
 
@@ -134,6 +141,7 @@ class CharacterController extends Controller {
         $character->level = $request->level;
         $character->armour = $request->armour;
         $character->boons_max = $request->boons_max;
+        $character->game_id = $request->game_id;
 
         $character->save();
 
