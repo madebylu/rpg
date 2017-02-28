@@ -75,6 +75,9 @@ Route::post('/edge/add', 'EdgeController@store');
 Route::get('/edge/edit/{id}', ['as' => 'edge.edit', 'uses' => 'EdgeController@edit']);
 Route::post('/edge/edit/{id}', ['as' => 'edge.update', 'uses' => 'EdgeController@update']);
 
+Route::get('/game/add', 'GameController@create');
+Route::post('/game/add', 'GameController@store');
+
 Route::get('/heritage/add', 'HeritageController@create');
 Route::post('/heritage/add', 'HeritageController@store');
 

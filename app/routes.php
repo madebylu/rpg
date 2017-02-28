@@ -47,6 +47,9 @@ Route::post('/character/set_skills/{id}', ['as' => 'character.store_skills','use
 Route::post('/character/update_inventory', ['as' => 'character.update_inventory','uses' =>'CharacterController@update_inventory']);
 Route::post('/character/ajax_show_skills', ['as' => 'character.ajax_show_skills','uses' =>'CharacterController@ajax_show_skills']);
 
+Route::get('/game/add', 'GameController@create');
+Route::post('/game/add', 'GameController@store');
+
 Route::get('/skill/add', 'SkillController@create');
 Route::post('/skill/add', 'SkillController@store');
 Route::get('/skill/edit/{id}', ['as' => 'skill.edit', 'uses' => 'SkillController@edit']);

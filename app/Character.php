@@ -16,6 +16,10 @@ class Character extends Model {
         return $this->belongsTo('App\Heritage')->orderBy('title');
     }
 
+	public function game() {
+        return $this->belongsTo('App\Game')->orderBy('title');
+    }
+
     public function skill() {
         return $this->belongsToMany('App\Skill')->withPivot('points', 'bonus')->orderBy('title');
     }
