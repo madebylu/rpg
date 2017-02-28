@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use Auth;
 use App\Character;
+use App\Game;
 
 class DashController extends Controller {
 
@@ -23,12 +24,12 @@ class DashController extends Controller {
 			} else {
 	        $user_name = Auth::user()->name;
 	        $characters = Character::where('user_id',Auth::user()->id)->orderBy('name')->get();
-            $all_characters = Character::all();
+            $games = Game::all();
 
-					return view('dash.dash')
-			            ->with('user_name', $user_name)
-			            ->with('characters', $characters)
-                        ->with('all_characters', $all_characters);
+            return view('dash.dash')
+                ->with('user_name', $user_name)
+                ->with('characters', $characters)
+                ->with('games', $games);
 			}
 	}
 
