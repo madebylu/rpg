@@ -1,24 +1,36 @@
 /*Page Layout*/
 
 html{
-    background: #211;
+    background: #FFF4F4;
     background-size: cover;
-    background-image: url('/img/bg.jpg');
+    /*background-image: url('/img/bg.jpg');*/
     background-attachment: fixed;
     font-family: 'open sans', sans-serif;
     height: 100%;
 }
 
 body{
-    color: #eef;
+    color: #fff;
+    color: #2e2e2e;
     background: #2e2e2e;
-    border: 2px solid #511;
-    box-shadow: 0 0 3px 3px black;
+    background: #fff;
+    box-shadow: 0 0 3px 0 black;
     margin: 0 auto;
     min-height: 100%;
     padding-top: 50px;
 }
 
+h1{
+    font-size: 1.4em;
+}
+
+h2{
+    font-size: 1.2em;
+}
+
+h3{
+    font-size: 1.1em;
+}
 p{
     padding-right: 1em;
     text-align: justify;
@@ -102,7 +114,7 @@ aside{
 }
 
 aside a{
-    color: #eef;
+    color: #211;
     font-family: oswald, serif;
     text-decoration: none;
 }
@@ -141,13 +153,14 @@ main{
 
 main h2 a, main h3, a{
     color: #eef;
+    color: #211;
 }
 
 /*Dice*/
 
 #dice div{
     background: white;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 4px;
     color: black;
     float: left;
@@ -167,12 +180,14 @@ main h2 a, main h3, a{
 
 }
 
+#dice{
+    clear: both;
+}
 
 #dice .operator{
     background: none;
     border: 2px none;
     clear: left;
-    color: #eef;
 }
 
 .dice_box{

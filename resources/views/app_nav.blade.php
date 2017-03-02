@@ -1,7 +1,7 @@
 <!-- Nav section -->
-<header class="navbar navbar-inverse navbar-fixed-top ">
+<header class="navbar navbar-inverse navbar-fixed-top">
     <nav class="container">
-        <h1>Lu's rpg</h1>
+        <!-- <h1>Lu's rpg</h1> -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
@@ -14,7 +14,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/rules">Rules</a></li>
                 <li><a href="/setting">Setting</a></li>
-                <li><a href="/dash">Play!</a></li>
+                <li><a href="/dash">@if(Auth::check())My Stuff @else Login @endif</a></li>
             </ul>
         </div>
     </nav>
