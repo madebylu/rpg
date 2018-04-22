@@ -49,12 +49,12 @@
             <p><input type="text" id="chat-box"></input></p>
         </div>
 
-        <div id="character_wounds">
+        <!--<div id="character_wounds">
             {!! Form::model($character) !!}
             {!! Form::label('wounds_text', 'Wounds') !!}
             {!! Form::textarea('wounds_text')!!}
             {!! Form::close() !!}
-        </div>
+        </div>-->
     </div>
 
     <!--
@@ -82,7 +82,7 @@
                 <p>{{$background->title}} - {{$background->content}}</p>
             @endforeach
 
-            <p>{{$character->description}}</p>
+            <p>{!!nl2br($character->description)!!}</p>
             </div>
 
             <div class="main-pane main-pane-canvas">
@@ -232,9 +232,8 @@
                 @endforeach
             </div>
             <div id="character_inventory_summary">
-                <h3>Inventory</h3>
                 {!! Form::model($character) !!}
-                {!! Form::label('inventory') !!}
+                {!! Form::label('inventory')!!}
                 {!! Form::textarea('inventory')!!}
                 {!! Form::close() !!}
             </div>
@@ -466,6 +465,7 @@
         if(layer == "actors"){
           actors = [];
         }
+        broadcast_layer(layer);
         refresh_canvas(context);
       }
 
@@ -524,8 +524,6 @@
       });
       $('#clear').on('click', function(event){
         clear_a_layer(active_layer);
-        var reset_obj = {"obj_type": "clear", "layer": active_layer };
-        conn.send(JSON.stringify(reset_obj));
       });
       $(canvas).bind("contextmenu", function(e) {
         e.preventDefault();
